@@ -174,8 +174,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- Camera Functionality --- 
     pictureButton.addEventListener('click', async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            let stream;
+            try {
+                // Try to get the back camera first
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+            } catch (envError) {
+                console.warn('Could not access environment camera, falling back to any available camera:', envError);
+                // Fallback to any available camera (usually front if environment fails)
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            }
             cameraFeed.srcObject = stream;
+            console.log('Camera stream active:', stream.active, 'Video tracks:', stream.getVideoTracks().length);
+            cameraFeed.play(); // Explicitly play the video
             cameraContainer.style.display = 'flex';
             imageContainer.innerHTML = ''; // Clear previous images
             imageBlobs = []; // Clear previous image blobs
