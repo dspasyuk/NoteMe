@@ -24,6 +24,8 @@ NoteMe is a client-side application, meaning it runs directly in your web browse
     ```
 2.  **Open in Browser:** Simply open the `index.html` file in your preferred web browser.
     ```bash
+    Just open the index.html in your web browser.
+    or
     # On Linux/macOS
     xdg-open index.html
     # On Windows
