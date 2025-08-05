@@ -61,6 +61,7 @@ NoteMe is a client-side application, meaning it runs directly in your web browse
 
 -   **Background Audio Recording:** Due to browser security and power-saving policies, continuous audio recording when the phone screen is off is generally not supported for web applications. Recording will likely pause or stop when the browser tab is in the background or the screen is off.
 
-<img width="826" height="413" alt="image" src="https://github.com/user-attachments/assets/a46c6a18-d6d1-4d81-aa6b-75c13a34eb59" />
+<img width="818" height="416" alt="image" src="https://github.com/user-attachments/assets/b9729186-e6d6-47e7-a25a-57b9c7e4cd53" />
+
 
 
