@@ -227,9 +227,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Start recording
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
-                    fullAudioChunks = [];
-                    transcriptionSegments = [];
-                    fullTranscription = ''; // Reset transcription for new recording
+                    if (!hasUnsavedChanges) {
+                        fullAudioChunks = [];
+                        transcriptionSegments = [];
+                        fullTranscription = ''; // Reset transcription for new recording
+                    }
                     currentStream = stream;
                     recordingStartTime = Date.now();
                     
