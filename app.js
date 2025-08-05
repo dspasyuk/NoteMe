@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Create a new image element for each captured image
         const newImage = document.createElement('img');
         newImage.src = canvas.toDataURL('image/png');
-        newImage.classList.add('w-25', 'rounded', 'border', 'me-2', 'mb-2'); // Add Bootstrap classes for styling
+        newImage.style.width = 'calc(33.333% - 10px)';
         imageContainer.appendChild(newImage);
         imageContainer.style.display = 'block';
         hasUnsavedChanges = true;

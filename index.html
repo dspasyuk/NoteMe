@@ -4,103 +4,226 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoteMe</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             background-color: #212121; /* Charcoal Black */
             color: #f5f5f5; /* White */
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
         }
         .card {
             background-color: #333333; /* Slightly lighter charcoal for card background */
             border: 1px solid #444444;
             color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .card-title {
+            text-align: center;
+            color: #cccccc !important; /* Light Grey */
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .camera-container {
+            margin-bottom: 1rem;
+            position: relative;
+            display: none;
+        }
+        .camera-feed {
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid #444;
+        }
+        .snap-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .snap-button svg {
+            width: 24px;
+            height: 24px;
+        }
+        .image-container {
+            margin-bottom: 1rem;
+            display: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .image-container img {
+            width: calc(33.333% - 10px);
+            border-radius: 4px;
+            border: 1px solid #444;
+        }
+        .canvas {
+            display: none;
         }
         .form-control {
             background-color: #424242;
             color: #f5f5f5;
-            border-color: #555555;
+            border: 1px solid #555555;
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 0.9rem;
         }
         .form-control::placeholder {
             color: #bbbbbb;
         }
         .form-label {
             color: #f5f5f5;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-size: 0.9rem;
         }
-        .text-primary {
-            color: #007bff !important; /* Keep primary blue for title */
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
         }
-        .text-muted {
+        .btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .status {
+            text-align: center;
             color: #cccccc !important;
+            margin-top: 1rem;
+        }
+        .downloads {
+            margin-top: 1rem;
         }
         hr {
             border-top: 1px solid #555555;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .load-note-section-row {
+            display: flex;
+            gap: 10px;
+        }
+        .load-note-col {
+            flex: 1;
+        }
+        .loaded-note-display {
+            margin-top: 2rem;
+            display: none;
+        }
+        .loaded-text {
+            margin-bottom: 1rem;
+        }
+        .loaded-images-container {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .loaded-images-container img {
+            width: calc(33.333% - 10px);
+            border-radius: 4px;
+            border: 1px solid #444;
+        }
+        .loaded-audio {
+            width: 100%;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container">
         <div class="card">
-            <div class="card-body">
-                <h1 class="card-title text-center text-primary">NoteMe</h1>
+            <h1 class="card-title">NoteMe</h1>
 
-                <div id="camera-container" class="mb-3 position-relative" style="display: none;">
-                    <video id="camera-feed" class="w-100 rounded border"></video>
-                                        <button id="snap-button" class="btn btn-primary position-absolute bottom-0 end-0 m-2" style="width: 10%; height: 10%;"><i class="fas fa-camera"></i></button>
-                </div>
-
-                <div id="image-container" class="mb-3" style="display: none;">
-                    <canvas id="canvas" style="display: none;"></canvas>
-                </div>
-
-                <div class="mb-3">
-                    <textarea id="note-text" class="form-control" rows="5" placeholder="Type your note here..."></textarea>
-                </div>
-
-                <div id="controls" class="d-grid gap-2">
-                    <div class="row g-2">
-                        <div class="col">
-                            <button id="picture-button" class="btn btn-primary w-100">Take Picture</button>
-                        </div>
-                        <div class="col">
-                            <button id="record-button" class="btn btn-danger w-100">Record Audio</button>
-                        </div>
-                    </div>
-                    <button id="save-button" class="btn btn-success w-100">Save Note</button>
-                </div>
-
-                <div id="status" class="text-center text-muted mt-3"></div>
-                <div id="downloads" class="mt-3"></div>
-
-                <hr>
-
-                <div id="load-note-section">
-                   
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="note-file-input" class="form-label">Select a `note.json` file:</label>
-                            <input type="file" id="note-file-input" class="form-control" accept=".zip">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="ogg-file-input" class="form-label">Transcribe an OGG audio file:</label>
-                            <input type="file" id="ogg-file-input" class="form-control" accept=".ogg">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="loaded-note-display" class="mt-4" style="display: none;">
-                    <h4>Loaded Note</h4>
-                    <div id="loaded-text" class="mb-3"></div>
-                    <div id="loaded-images-container" class="mb-3"></div>
-                    <audio id="loaded-audio" controls class="w-100" style="display: none;"></audio>
-                </div>
-
+            <div id="camera-container" class="camera-container">
+                <video id="camera-feed" class="camera-feed"></video>
+                <button id="snap-button" class="snap-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                </button>
             </div>
+
+            <div id="image-container" class="image-container">
+                <canvas id="canvas" class="canvas"></canvas>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <textarea id="note-text" class="form-control" rows="5" placeholder="Type your note here..."></textarea>
+            </div>
+
+            <div id="controls" class="controls-row">
+                <button id="picture-button" class="btn btn-primary">Take Picture</button>
+                <button id="record-button" class="btn btn-danger">Record Audio</button>
+                <button id="save-button" class="btn btn-success">Save Note</button>
+            </div>
+
+            <div id="status" class="status"></div>
+            <div id="downloads" class="downloads"></div>
+
+            <hr>
+
+            <div id="load-note-section">
+                <div class="load-note-section-row">
+                    <div class="load-note-col">
+                        <label for="note-file-input" class="form-label">Select a `note.json` file:</label>
+                        <input type="file" id="note-file-input" class="form-control" accept=".zip">
+                    </div>
+                    <div class="load-note-col">
+                        <label for="ogg-file-input" class="form-label">Transcribe an OGG audio file:</label>
+                        <input type="file" id="ogg-file-input" class="form-control" accept=".ogg">
+                    </div>
+                </div>
+            </div>
+
+            <div id="loaded-note-display" class="loaded-note-display">
+                <h4>Loaded Note</h4>
+                <div id="loaded-text" class="loaded-text"></div>
+                <div id="loaded-images-container" class="loaded-images-container"></div>
+                <audio id="loaded-audio" controls class="loaded-audio"></audio>
+            </div>
+
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="jszip.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
